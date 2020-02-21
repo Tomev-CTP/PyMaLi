@@ -1,4 +1,4 @@
-import multiprocessing
+from multiprocessing import Process, Lock
 
 
 class GeneralTensorCalculator:
@@ -18,9 +18,15 @@ class GeneralTensorCalculator:
         # Initialize tensor with empty values
         self.__initialize_tensor(indices_combinations)
 
+        # Prepare for multiprocessing
+        processes = []
+
         # Fill tensor dict with values
         for combination in indices_combinations:
             self.__count_tensor_value_for_combination(combination, objects)
+            #process = Process(target=self.__count_tensor_value_for_combination, args=combination)
+            #processes.append(process)
+            #process.start()
 
         return self.tensor
 
@@ -30,17 +36,21 @@ class GeneralTensorCalculator:
 
         # Note that len of objects should be equal to len of current_combination as it contains index value
         # for each object.
-        for i in range(len(objects) - 1):
-            f_arguments += [objects[i][combination[0]]]
-            tensor = tensor[combination.pop(0)]
+        for i in range(len(objects)):
+            f_arguments += [objects[i][combination[i]]]
+            # tensor = tensor[combination.pop(0)] ## delete if works
 
         # After above loop only one element remains and tensor should be in place, therefore only thing to do
         # left is assigning it value of f
-        f_arguments += [objects[-1][combination[0]]]
 
-        tensor[combination.pop(0)] = self.f(f_arguments)
+        try:
+            for i in range(len(combination) - 1):
+                tensor = tensor[combination[i]]
+            tensor[combination[-1]] = self.f(f_arguments)
+        finally:
+            print('works')
 
-    # Get combinations of all possible indices variation. Eg.
+    # Get combinations of all possible indices variation.
     def __get_indices_combinations(self, objects: list) -> list:
         # Finish if objects list is empty. This should not happen.
         if len(objects) == 0:
