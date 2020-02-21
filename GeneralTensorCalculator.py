@@ -1,38 +1,44 @@
+import multiprocessing
+
+
 class GeneralTensorCalculator:
 
     def __init__(self, f):
         self.f = f
+        self.objects = []
+        self.tensor = dict()
 
     # Calculates tensor for given object using function f provided in the constructor.
     def calculate_tensor(self, objects: list) -> dict:
-        resultant_tensor = dict()
+        self.tensor = dict()
 
         # Get indices combinations
-        indices_combination = self.__get_indices_combinations(objects.copy())
+        indices_combinations = self.__get_indices_combinations(objects.copy())
 
         # Initialize tensor with empty values
-        self.__initialize_tensor(resultant_tensor, indices_combination)
+        self.__initialize_tensor(indices_combinations)
 
         # Fill tensor dict with values
-        while len(indices_combination) != 0:
+        for combination in indices_combinations:
+            self.__count_tensor_value_for_combination(combination, objects)
 
-            current_combination = indices_combination.pop(0)
-            tensor = resultant_tensor
-            f_arguments = []
+        return self.tensor
 
-            # Note that len of objects should be equal to len of current_combination as it contains index value
-            # for each object.
-            for i in range(len(objects) - 1):
-                f_arguments += [objects[i][current_combination[0]]]
-                tensor = tensor[current_combination.pop(0)]
+    def __count_tensor_value_for_combination(self, combination, objects):
+        tensor = self.tensor
+        f_arguments = []
 
-            # After above loop only one element remains and tensor should be in place, therefore only thing to do
-            # left is assigning it value of f
-            f_arguments += [objects[-1][current_combination[0]]]
+        # Note that len of objects should be equal to len of current_combination as it contains index value
+        # for each object.
+        for i in range(len(objects) - 1):
+            f_arguments += [objects[i][combination[0]]]
+            tensor = tensor[combination.pop(0)]
 
-            tensor[current_combination.pop(0)] = self.f(f_arguments)
+        # After above loop only one element remains and tensor should be in place, therefore only thing to do
+        # left is assigning it value of f
+        f_arguments += [objects[-1][combination[0]]]
 
-        return resultant_tensor
+        tensor[combination.pop(0)] = self.f(f_arguments)
 
     # Get combinations of all possible indices variation. Eg.
     def __get_indices_combinations(self, objects: list) -> list:
@@ -64,13 +70,13 @@ class GeneralTensorCalculator:
 
     # Initializing tensor as dict of dict of dict ... with zeros. Initialization for each combination is performed
     # once at a time.
-    def __initialize_tensor(self, tensor, indices_combination) -> None:
+    def __initialize_tensor(self, indices_combination) -> None:
         # Error check.
         if len(indices_combination) == 0:
             return
 
         for combination in indices_combination:
-            self.__initialize_combination_path(tensor, combination.copy())
+            self.__initialize_combination_path(self.tensor, combination.copy())
 
     # Initializing tensor with 0 for given path
     def __initialize_combination_path(self, tensor, combination):
