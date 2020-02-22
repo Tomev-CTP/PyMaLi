@@ -5,7 +5,6 @@ class GeneralTensorCalculator:
 
     def __init__(self, f):
         self.f = f
-        self.objects = []
         self.tensor = dict()
         self.lock = Lock()
 
@@ -24,10 +23,9 @@ class GeneralTensorCalculator:
 
         # Fill tensor dict with values
         for combination in indices_combinations:
-            if __name__ == '__main__':
-                thread = Thread(target=self.count_tensor_value_for_combination, args=(combination, objects,))
-                threads.append(thread)
-                thread.start()
+            thread = Thread(target=self.count_tensor_value_for_combination, args=(combination, objects,))
+            threads.append(thread)
+            thread.start()
 
         for thread in threads:
             thread.join()
@@ -111,37 +109,3 @@ class GeneralTensorCalculator:
         if not tensor.keys().__contains__(initialized_index):
             tensor[initialized_index] = dict()
         self.__initialize_combination_path(tensor[initialized_index], combination)
-
-
-#### Examples #####
-
-def my_test_f(arguments: list) -> float:
-    result = 1
-
-    for a in arguments:
-        result *= a
-
-    return result
-
-
-def my_test_f_2(arguments: list):
-    result = 1
-
-    for a in arguments:
-        result = np.kron(result, a)
-
-    return result
-
-
-gtc = GeneralTensorCalculator(my_test_f)
-t = gtc.calculate_tensor([[1, 2, 3], [40, 50], [600, 700, 800]])
-
-import numpy as np
-sigma_z=np.array([[1,0],[0,-1]])
-
-gtc2 = GeneralTensorCalculator(my_test_f_2)
-t2 = gtc2.calculate_tensor([
-    [1*sigma_z, 2*sigma_z],
-    [2*np.eye(4), 3*np.eye(4), 4*np.eye(4),5*np.eye(5)],
-    [10*sigma_z, 1000*sigma_z, 10e6*sigma_z]
-])
