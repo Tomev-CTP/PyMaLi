@@ -1,4 +1,4 @@
-from multiprocessing import Process, Lock
+from threading import Thread, Lock
 
 
 class GeneralTensorCalculator:
@@ -7,6 +7,7 @@ class GeneralTensorCalculator:
         self.f = f
         self.objects = []
         self.tensor = dict()
+        self.lock = Lock()
 
     # Calculates tensor for given object using function f provided in the constructor.
     def calculate_tensor(self, objects: list) -> dict:
@@ -19,36 +20,42 @@ class GeneralTensorCalculator:
         self.__initialize_tensor(indices_combinations)
 
         # Prepare for multiprocessing
-        processes = []
+        threads = []
 
         # Fill tensor dict with values
         for combination in indices_combinations:
-            self.__count_tensor_value_for_combination(combination, objects)
-            #process = Process(target=self.__count_tensor_value_for_combination, args=combination)
-            #processes.append(process)
-            #process.start()
+            if __name__ == '__main__':
+                thread = Thread(target=self.count_tensor_value_for_combination, args=(combination, objects,))
+                threads.append(thread)
+                thread.start()
+
+        for thread in threads:
+            thread.join()
 
         return self.tensor
 
-    def __count_tensor_value_for_combination(self, combination, objects):
-        tensor = self.tensor
+    # This method has to be public in order to be used in multiprocessing.
+    def count_tensor_value_for_combination(self, combination, objects):
+
+        # First count function value for better multiprocessing performance
         f_arguments = []
 
         # Note that len of objects should be equal to len of current_combination as it contains index value
         # for each object.
         for i in range(len(objects)):
             f_arguments += [objects[i][combination[i]]]
-            # tensor = tensor[combination.pop(0)] ## delete if works
 
-        # After above loop only one element remains and tensor should be in place, therefore only thing to do
-        # left is assigning it value of f
+        # Calculate function value now, so that tensor is locked for less time.
+        function_value = self.f(f_arguments)
 
+        self.lock.acquire()
         try:
+            tensor = self.tensor
             for i in range(len(combination) - 1):
                 tensor = tensor[combination[i]]
-            tensor[combination[-1]] = self.f(f_arguments)
+            tensor[combination[-1]] = function_value
         finally:
-            print('works')
+            self.lock.release()
 
     # Get combinations of all possible indices variation.
     def __get_indices_combinations(self, objects: list) -> list:
@@ -104,7 +111,6 @@ class GeneralTensorCalculator:
         if not tensor.keys().__contains__(initialized_index):
             tensor[initialized_index] = dict()
         self.__initialize_combination_path(tensor[initialized_index], combination)
-
 
 
 #### Examples #####
