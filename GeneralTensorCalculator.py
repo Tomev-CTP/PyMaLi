@@ -32,6 +32,27 @@ class GeneralTensorCalculator:
 
         return self.tensor
 
+    # Calculates tensor for given object using function f provided in the constructor, but returns
+    # results as a list with increasing order.
+    def calculate_tensor_to_increasing_list(self, objects: list) -> list:
+        tensor_dict = self.calculate_tensor(objects)
+        tensor_list = self.__get_increasing_objects_dict_from_list(tensor_dict)
+        return tensor_list
+
+    def __get_increasing_objects_dict_from_list(self, d: dict) -> list:
+        objects_list = []
+        dict_keys = d.keys()
+
+        # This may cause problem if the tensor was somehow calculated for dicts, if it's even possible.
+        if type(d[dict_keys[0]]) == dict:
+            for k in dict_keys:
+                objects_list += self.__get_increasing_objects_dict_from_list(d[k])
+        else:
+            for k in dict_keys:
+                objects_list.append(d[k])
+
+        return objects_list
+
     # This method has to be public in order to be used in multiprocessing.
     def count_tensor_value_for_combination(self, combination, objects):
 
