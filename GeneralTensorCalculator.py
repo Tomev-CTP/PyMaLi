@@ -41,7 +41,7 @@ class GeneralTensorCalculator:
 
     def __get_increasing_objects_dict_from_list(self, d: dict) -> list:
         objects_list = []
-        dict_keys = d.keys()
+        dict_keys = list(d.keys())
 
         # This may cause problem if the tensor was somehow calculated for dicts, if it's even possible.
         if type(d[dict_keys[0]]) == dict:

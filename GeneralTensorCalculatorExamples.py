@@ -22,7 +22,8 @@ def my_test_f_2(arguments: list):
 
 
 gtc = GeneralTensorCalculator(my_test_f)
-t = gtc.calculate_tensor([[1, 2, 3], [40, 50], [600, 700, 800]])
+args1 = [[1, 2, 3], [40, 50], [600, 700, 800]]
+t = gtc.calculate_tensor(args1)
 
 sigma_z = np.array([[1, 0], [0, -1]])
 
@@ -32,3 +33,8 @@ t2 = gtc2.calculate_tensor([
     [2*np.eye(4), 3*np.eye(4), 4*np.eye(4),5*np.eye(5)],
     [10*sigma_z, 1000*sigma_z, 10e6*sigma_z]
 ])
+
+t3 = gtc.calculate_tensor_to_increasing_list(args1)
+print(t3)
+t3.sort()
+print(t3)
