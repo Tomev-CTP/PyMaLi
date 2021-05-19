@@ -9,7 +9,7 @@ __author__ = "Tomasz Rybotycki"
 """
 
 from numpy import median, mean
-from collections.abc import Iterable
+from typing import Iterable
 from random import shuffle
 
 def mom_mean(population: Iterable[float], elements_per_mean: int) -> float:
