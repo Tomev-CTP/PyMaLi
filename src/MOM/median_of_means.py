@@ -14,6 +14,8 @@ from random import shuffle
 
 def mom_mean(population: Sequence[float], elements_per_mean: int) -> float:
     """
+        This method computes mean estimator using median of means method. It requires
+        user to specify size of the block for single mean calculation.
 
         :param elements_per_mean: Number of elements in the sequence from which every
         mean will be estimated.
@@ -32,9 +34,13 @@ def mom_mean(population: Sequence[float], elements_per_mean: int) -> float:
 
     return median(means)
 
-def prmom_mean(population: Sequence[float], elements_per_mean: int,
+def pimom_mean(population: Sequence[float], elements_per_mean: int,
                permutations_number: int = 10) -> float:
     """
+    This method computes mean estimator using permutation invariant median of means
+    method. It requires user to specify size of the block for single mean calculation.
+    By default it computes moms for 10 different permutations.
+
     :param elements_per_mean: Number of elements in the sequence from which every
     mean will be estimated.
     :param population: Population of which mean will be estimated.
