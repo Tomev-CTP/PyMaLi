@@ -9,10 +9,10 @@ __author__ = "Tomasz Rybotycki"
 """
 
 from numpy import median, mean
-from collections.abc import Sequence
+from collections.abc import Iterable
 from random import shuffle
 
-def mom_mean(population: Sequence[float], elements_per_mean: int) -> float:
+def mom_mean(population: Iterable[float], elements_per_mean: int) -> float:
     """
         This method computes mean estimator using median of means method. It requires
         user to specify size of the block for single mean calculation.
@@ -34,7 +34,7 @@ def mom_mean(population: Sequence[float], elements_per_mean: int) -> float:
 
     return median(means)
 
-def pimom_mean(population: Sequence[float], elements_per_mean: int,
+def pimom_mean(population: Iterable[float], elements_per_mean: int,
                permutations_number: int = 10) -> float:
     """
     This method computes mean estimator using permutation invariant median of means
