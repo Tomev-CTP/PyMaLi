@@ -12,6 +12,7 @@ from numpy import median, mean
 from typing import Iterable
 from random import shuffle
 
+
 def mom_mean(population: Iterable[float], elements_per_mean: int) -> float:
     """
         This method computes mean estimator using median of means method. It requires
@@ -34,12 +35,13 @@ def mom_mean(population: Iterable[float], elements_per_mean: int) -> float:
 
     return median(means)
 
+
 def pimom_mean(population: Iterable[float], elements_per_mean: int,
                permutations_number: int = 10) -> float:
     """
     This method computes mean estimator using permutation invariant median of means
     method. It requires user to specify size of the block for single mean calculation.
-    By default it computes moms for 10 different permutations.
+    By default, it computes moms for 10 different permutations.
 
     :param elements_per_mean: Number of elements in the sequence from which every
     mean will be estimated.
@@ -47,5 +49,7 @@ def pimom_mean(population: Iterable[float], elements_per_mean: int,
     :param permutations_number:
     :return: Estimator of population mean.
     """
-    mom_means = [mom_mean(population, elements_per_mean)]
+    mom_means = [mom_mean(population, elements_per_mean)
+                 for _ in range(permutations_number)]
+
     return mean(mom_means)
