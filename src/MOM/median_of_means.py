@@ -27,7 +27,7 @@ def mom_mean(population: Iterable[float], elements_per_mean: int) -> float:
 
     # Using trick from https://www.geeksforgeeks.org/break-list-chunks-size-n-python/
     elements_blocks = [
-        population[i * elements_per_mean:(i + 1) * elements_per_mean]
+        population[i * elements_per_mean : (i + 1) * elements_per_mean]
         for i in range((len(population) + elements_per_mean - 1) // elements_per_mean)
     ]
 
@@ -36,8 +36,9 @@ def mom_mean(population: Iterable[float], elements_per_mean: int) -> float:
     return median(means)
 
 
-def pimom_mean(population: Iterable[float], elements_per_mean: int,
-               permutations_number: int = 10) -> float:
+def pimom_mean(
+    population: Iterable[float], elements_per_mean: int, permutations_number: int = 10
+) -> float:
     """
     This method computes mean estimator using permutation invariant median of means
     method. It requires user to specify size of the block for single mean calculation.
@@ -49,7 +50,8 @@ def pimom_mean(population: Iterable[float], elements_per_mean: int,
     :param permutations_number:
     :return: Estimator of population mean.
     """
-    mom_means = [mom_mean(population, elements_per_mean)
-                 for _ in range(permutations_number)]
+    mom_means = [
+        mom_mean(population, elements_per_mean) for _ in range(permutations_number)
+    ]
 
     return mean(mom_means)

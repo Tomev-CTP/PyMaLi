@@ -2,7 +2,6 @@ from threading import Thread, Lock
 
 
 class GeneralTensorCalculator:
-
     def __init__(self, f):
         self.f = f
         self.tensor = dict()
@@ -23,7 +22,10 @@ class GeneralTensorCalculator:
 
         # Fill tensor dict with values
         for combination in indices_combinations:
-            thread = Thread(target=self.count_tensor_value_for_combination, args=(combination, objects,))
+            thread = Thread(
+                target=self.count_tensor_value_for_combination,
+                args=(combination, objects,),
+            )
             threads.append(thread)
             thread.start()
 
