@@ -23,17 +23,31 @@ class DecimalComplex:
         self.real = real
         self.imaginary = imaginary
 
-    def __add__(self, other: DecimalComplex) -> DecimalComplex:
+    def __add__(self, other) -> DecimalComplex:
+
+        if isinstance(other, (int, float)):
+            other = DecimalComplex(other, 0)
+
         return DecimalComplex(
             self.real + other.real,
             self.imaginary + other.imaginary
         )
 
+    def __radd__(self, other) -> DecimalComplex:
+        return self.__add__(other)
+
     def __mul__(self, other: DecimalComplex) -> DecimalComplex:
+
+        if isinstance(other, (int, float)):
+            other = DecimalComplex(other, 0)
+
         return DecimalComplex(
             self.real * other.real - self.imaginary * other.imaginary,
             self.real * other.imaginary + self.imaginary * other.real
         )
+
+    def __rmul__(self, other) -> DecimalComplex:
+        return self.__mul__(other)
 
     def __neg__(self) -> DecimalComplex:
         return DecimalComplex(-self.real, - self.imaginary)
