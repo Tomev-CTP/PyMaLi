@@ -5,7 +5,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="pymali",
-    version="1.0.1",
+    version="1.0.2",
     author="Tomasz Rybotycki",
     author_email="rybotycki.tomasz+theboss@gmail.com",
     long_description=long_description,

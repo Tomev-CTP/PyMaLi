@@ -12,6 +12,7 @@ __author__ = "Tomasz Rybotycki"
 """
 
 from decimal import Decimal
+from typing import Union
 
 
 class DecimalComplex:
@@ -19,7 +20,11 @@ class DecimalComplex:
     An implementation of arbitrary precision complex number based on Decimal.
     """
 
-    def __init__(self, real=0, imaginary=0) -> None:
+    def __init__(
+        self,
+        real: Union[float, int, Decimal] = 0,
+        imaginary: Union[float, int, Decimal] = 0,
+    ) -> None:
 
         if isinstance(real, (int, float)):
             real = Decimal(real)
@@ -38,15 +43,7 @@ class DecimalComplex:
         if isinstance(other, complex):
             other = DecimalComplex(other.real, other.imag)
 
-        try:
-            result = DecimalComplex(
-                self.real + other.real, self.imaginary + other.imaginary
-            )
-        except Exception:
-            print(type(self.real))
-            print(type(other))
-
-        return result
+        return DecimalComplex(self.real + other.real, self.imaginary + other.imaginary)
 
     def __radd__(self, other) -> DecimalComplex:
         return self.__add__(other)
@@ -83,3 +80,10 @@ class DecimalComplex:
             result *= self
 
         return result
+
+    def conjugate(self) -> DecimalComplex:
+        return DecimalComplex(self.real, -self.imaginary)
+
+    def __abs__(self) -> Decimal:
+        module_squared = self * self.conjugate()
+        return module_squared.real.sqrt()
