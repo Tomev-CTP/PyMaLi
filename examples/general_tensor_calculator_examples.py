@@ -1,4 +1,4 @@
-from src.Tensors.GeneralTensorCalculator import GeneralTensorCalculator
+from tensors import GeneralTensorCalculator
 import numpy as np
 
 

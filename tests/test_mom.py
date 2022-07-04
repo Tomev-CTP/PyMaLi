@@ -7,7 +7,7 @@ __author__ = "Tomasz Rybotycki"
 """
 
 from unittest import TestCase
-from ..src.MOM.median_of_means import mom_mean, pimom_mean
+from mom.median_of_means import mom_mean, pimom_mean
 from numpy import mean
 from numpy.random import choice, standard_t
 
