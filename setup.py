@@ -11,7 +11,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     description="(Py)thon (Ma)th (Li)brary that implements math stuff I need, which"
-                "is not available in default libraries!",
+    "is not available in default libraries!",
     packages=find_packages(exclude=["tests", "examples"]),
     install_requires=[
         "requests",
